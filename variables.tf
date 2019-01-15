@@ -23,6 +23,12 @@ variable "icp-management" {
   default     = []
 }
 
+variable "icp-va" {
+  type        = "list"
+  description = "IP addresses of ICP Management Nodes, if management is to be separated from master nodes. Optional"
+  default     = []
+}
+
 variable "image_location" {
   description = "NFS or HTTP location where image tarball can be accessed"
   default     = ""
@@ -173,10 +179,10 @@ variable "docker_version" {
 }
 
 locals {
-  spec-icp-ips  = "${distinct(compact(concat(list(var.boot-node), var.icp-master, var.icp-proxy, var.icp-management, var.icp-worker)))}"
+  spec-icp-ips  = "${distinct(compact(concat(list(var.boot-node), var.icp-master, var.icp-proxy, var.icp-management, var.icp-va, var.icp-worker)))}"
   host-group-ips = "${distinct(compact(concat(list(var.boot-node), keys(transpose(var.icp-host-groups)))))}"
   icp-ips       = "${distinct(concat(local.spec-icp-ips, local.host-group-ips))}"
-  cluster_size  = "${length(concat(var.icp-master, var.icp-proxy, var.icp-worker, var.icp-management))}"
+  cluster_size  = "${length(concat(var.icp-master, var.icp-proxy, var.icp-worker, var.icp-va, var.icp-management))}"
   ssh_key       = "${base64decode(var.ssh_key_base64)}"
   boot-node     = "${element(compact(concat(list(var.boot-node),var.icp-master)), 0)}"
 }

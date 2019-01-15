@@ -188,6 +188,7 @@ resource "null_resource" "icp-config" {
       "echo -n ${join(",", var.icp-master)} > /opt/ibm/cluster/masterlist.txt",
       "echo -n ${join(",", var.icp-proxy)} > /opt/ibm/cluster/proxylist.txt",
       "echo -n ${join(",", var.icp-worker)} > /opt/ibm/cluster/workerlist.txt",
+      "echo -n ${join(",", var.icp-va)} > /opt/ibm/cluster/valist.txt",
       "echo -n ${join(",", var.icp-management)} > /opt/ibm/cluster/managementlist.txt"
     ]
   }
@@ -273,6 +274,7 @@ resource "null_resource" "icp-worker-scaler" {
       "echo -n ${join(",", var.icp-master)} > /tmp/masterlist.txt",
       "echo -n ${join(",", var.icp-proxy)} > /tmp/proxylist.txt",
       "echo -n ${join(",", var.icp-worker)} > /tmp/workerlist.txt",
+      "echo -n ${join(",", var.icp-va)} > /tmp/valist.txt",
       "echo -n ${join(",", var.icp-management)} > /tmp/managementlist.txt"
     ]
   }

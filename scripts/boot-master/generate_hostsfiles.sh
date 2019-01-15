@@ -69,6 +69,20 @@ read_from_groupfiles() {
     done
   fi
 
+  # Add va nodes if separate from master nodes
+  if [[ -s ${WORKDIR}/valist.txt ]]
+  then
+    declare -a va_ips
+    IFS=', ' read -r -a va_ips <<< $(cat ${WORKDIR}/valist.txt)
+
+    declare -A mngrs
+    for m in "${va_ips[@]}"; do
+      mngrs[$m]=$(ssh -o StrictHostKeyChecking=no -i ${WORKDIR}/ssh_key ${m} hostname)
+      cluster[$m]=${mngrs[$m]}
+      printf "%s     %s\n" "$m" "${cluster[$m]}" >> /tmp/hosts
+    done
+  fi
+
   ## Generate the hosts file for the ICP installation
   echo '[master]' > ${ICPDIR}/hosts
   for master in "${master_ips[@]}"; do
@@ -93,6 +107,15 @@ read_from_groupfiles() {
     echo  >> ${ICPDIR}/hosts
     echo '[management]' >> ${ICPDIR}/hosts
     for m in "${management_ips[@]}"; do
+      echo $m >> ${ICPDIR}/hosts
+    done
+  fi
+  # Add va host entries if separate from master nodes
+  if [[ ! -z ${va_ips} ]]
+  then
+    echo  >> ${ICPDIR}/hosts
+    echo '[va]' >> ${ICPDIR}/hosts
+    for m in "${va_ips[@]}"; do
       echo $m >> ${ICPDIR}/hosts
     done
   fi
