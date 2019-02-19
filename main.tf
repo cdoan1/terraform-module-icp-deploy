@@ -143,6 +143,7 @@ resource "null_resource" "icp-boot" {
   provisioner "file" {
     source       = "${var.icp_config_file}"
     destination = "/tmp/config.yaml"
+    on_failure = "continue"
   }
 
   # JSON dump the contents of icp_configuration items

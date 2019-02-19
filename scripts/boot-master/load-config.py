@@ -5,7 +5,7 @@ ci = '/tmp/items-config.yaml'
 co = '/opt/ibm/cluster/config.yaml'
 
 # Load config from config file if provided
-if os.stat(cf).st_size == 0:
+if not os.path.exists(cf) or os.stat(cf).st_size == 0:
   config_f = {}
 else:
   with open(cf, 'r') as stream:

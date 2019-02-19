@@ -104,7 +104,7 @@ variable "cluster_size" {
 */
 variable "icp_config_file" {
   description = "Yaml configuration file for ICP installation"
-  default     = "/dev/null"
+  default     = "/tmp/config.yaml"
 }
 
 variable "icp_configuration" {
